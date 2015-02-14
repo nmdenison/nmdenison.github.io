@@ -1,0 +1,23 @@
+*{
+font-family:Verdana;
+font-size:12px;
+}
+table{
+border-collapse:collapse;
+}
+table, td, th{
+border:1px solid;
+padding:10px;
+text-align:center;
+
+}
+tr:nth-child(odd){
+background-color:#efefef;
+}
+th {
+font-weight:bold;
+width: 125px;
+background-color:#5d5d5d;
+}
+
+

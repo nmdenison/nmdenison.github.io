@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link type="text/css" rel="stylesheet" href="stylesheet.css" />
+<title>HW2</title>
+</head>
+<body>
+<center>
+
+<div id="id01">
+</div>
+
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "https://hivelab.org/static/students.json";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {
+    var arr = JSON.parse(response);
+    var i;
+    var out = "<table><tr><th>Name</th><th>GPA</th><th>Verbal GRE</th><th>Quant GRE</th><th>Essay</th><th>Recom</th></tr>";
+
+    for(i = 0; i < arr.length; i++) {
+  
+        out += "<tr><td>" + 
+        arr[i].Name +
+        "</td><td>" +
+        arr[i].GPA +
+        "</td><td>" +
+        arr[i].GRE_V +
+        "</td><td>" +
+        arr[i].GRE_Q +
+        "</td><td>" +
+        arr[i].Essay +
+        "</td><td>" +
+        arr[i].Recom +
+        "</td></tr>";
+    }
+    out += "</table>"
+    document.getElementById("id01").innerHTML = out;
+}
+</script>
+</center>
+</body>
+</html>
