@@ -1,173 +1,182 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title>HW3</title>
+	<script src="http://d3js.org/d3.v3.min.js"></script>
 </head>
 
 <style>
-body {
-	font: 11px sans-serif;
-}
-
-h1 {
-	font: 20px sans-serif;
-}
-
-.textBlock {
-	font: 14px sans-serif;
-	text-align: left;
-	width: 60%;
-	}
-	
-#cite {
-	font: 11px sans-serif;
-	font-style: italic;
-	text-align: center;
-	}
-
-	
-.axis path,.axis line {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
-}
-
-.dot {
-	stroke: #000;
-}
-
-.tooltip {
-	position: absolute;
-	width: 200px;
-	height: 28px;
-	pointer-events: none;
-}
+	body {
+		font: 12px sans-serif;
+		}
+	h1 {
+		font: 20px sans-serif;
+		}
+	.axis path, .axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+		}
+	.dot {
+		stroke: #000;
+		}
+	.tooltip {
+		background-color: #ffffff;
+		position: absolute;
+		width: 50px;
+		height: 28px;
+		pointer-events: none;
+		}
+	.textBlock {
+		font: 14px sans-serif;
+		text-align: left;
+		width: 60%;
+		}
+	#cite {
+		font: 11px sans-serif;
+		font-style: italic;
+		text-align: center;
+		}
 </style>
+
 <body>
-<center>
-<h1>Sitting in Class is a Waste of Time</h1>
-<div align="center">
-<script src="http://d3js.org/d3.v3.min.js"></script>
+	<center>
+	<h1>Sitting in Class is a Waste of Time</h1>
+	<br><br>
+	<p id="cite">Hover over each point for Country name.</p>
+	
+	<div align="center">
+	<script>
+	//Scatterplot on the D3 website used as an example
+	
+		var buffer = {top: 20, right: 20, bottom: 30, left: 40},
+			width = 1000 - buffer.left - buffer.right,
+			height = 600 - buffer.top - buffer.bottom;
+			
+		var xData = function(d) {
+			return d.mTime;
+			},
+			xScale = d3.scale.linear().range([0, width]),
+			xMap = function(d) { return xScale(xData(d));}, 
+			xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+			
+		var yData = function(d) {
+			return d.mScore;
+			}, 
+			yScale = d3.scale.linear().range([height, 0]), 
+			yMap = function(d) { return yScale(yData(d));}, 
+			yAxis = d3.svg.axis().scale(yScale).orient("left");
+			
+		var catData = function(d) {
+			return d.area;
+			},
+			color = d3.scale.category10();
+			
+		var svg = d3.select("div").append("svg")
+			.attr("width", width + buffer.left + buffer.right)
+			.attr("height", height + buffer.top + buffer.bottom)
+			.append("g")
+			.attr("transform", "translate(" + buffer.left + "," + buffer.top + ")");
+			
+		var tooltip = d3.select("body").append("div")
+			.attr("class", "tooltip")
+			.style("opacity", 0);
+			
+			
+		d3.tsv("Data.tsv", function(error, data) {
+			data.forEach(function(d) {
+				d.mScore = +d.mScore;
+				d.mTime = +d.mTime;
+			});
+			
+		xScale.domain([d3.min(data, xData)-10, d3.max(data, xData)+10]);
+		yScale.domain([d3.min(data, yData)-10, d3.max(data, yData)+10]);
+		
+		svg.append("g")
+			.attr("class", "y axis")
+			.call(yAxis)
+			.append("text")
+			.attr("class", "label")
+			.attr("transform", "rotate(-90)")
+			.attr("y", -40)
+			.attr("x", -210)
+			.attr("dy", ".71em")
+			.style("text-anchor", "end")
+			.text("Average score");
+			
+		svg.append("g")
+			.attr("class", "x axis")
+			.attr("transform", "translate(0," + height + ")")
+			.call(xAxis)
+			.append("text")
+			.attr("class", "label")
+			.attr("x", 560)
+			.attr("y", +30)
+			.style("text-anchor", "end")
+			.text("Hours of instruction per year");
+			
+		svg.selectAll(".dot")
+			.data(data)
+			.enter().append("circle")
+			.attr("class", "dot")
+			.attr("r", 3.5)
+			.attr("cx", xMap)
+			.attr("cy", yMap)
+			.style("fill", function(d) { return color(catData(d));}) 
+			.on("mouseover", function(d) {
+				tooltip.transition()
+				.duration(200)
+				.style("opacity", .9);
+				tooltip.html(d.country)
+				.style("left", (d3.event.pageX + 10) + "px")
+				.style("top", (d3.event.pageY - 8) + "px");
+			})
+			.on("mouseout", function(d) {
+				tooltip.transition()
+				.duration(500)
+				.style("opacity", 0);
+			});
+			
+		var legend = svg.selectAll(".legend")
+			.data(color.domain())
+			.enter().append("g")
+			.attr("class", "legend")
+			.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
+		legend.append("rect")
+			.attr("x", width - 20)
+			.attr("y", 380)
+			.attr("width", 18)
+			.attr("height", 18)
+			.style("fill", color);
 
-<script>
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+		legend.append("text")
+			.attr("x", width - 24)
+			.attr("y", 389)
+			.attr("dy", ".35em")
+			.style("text-anchor", "end")
+			.text(function(d) { return d;})
+}		);
+	</script>
+	</div>
+	<br>
+		<p id="cite">Source: <a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp">Average fourth-grade scores and annual instructional time in mathematics and science, by country or other education system: 2011.</a></p>
+		<br><br>
+		
+		<p class="textBlock">The above is a scatter plot of average time of math instruction against average math test scores by country. While the source data has both math and science, only the math data was used to achieve a cleaner plot.</p>
+		
+		<p class="textBlock">The calculated Person Correlation for instruction hours and test score is 0.162 signifying almost no correlation between the two. Also of interest is the banding of geographical areas relative to test scores - with Asia being at the top, Europe/Eurasia/Oceania and the Americas in the middle, and the Mid East and Africa toward the bottom. This effect is shown independent of instruction hours.</p>
+	</center>
+	
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-var xValue = function(d) { return d.mTime;},
-    xScale = d3.scale.linear().range([0, width]),
-    xMap = function(d) { return xScale(xValue(d));}, 
-    xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+		ga('create', 'UA-59987209-1', 'auto');
+		ga('send', 'pageview');
 
-var yValue = function(d) { return d.mScore;}, 
-    yScale = d3.scale.linear().range([height, 0]), 
-    yMap = function(d) { return yScale(yValue(d));}, 
-    yAxis = d3.svg.axis().scale(yScale).orient("left");
-
-var cValue = function(d) { return d.area;},
-    color = d3.scale.category10();
-
-var svg = d3.select("div").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-var tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0);
-
-d3.tsv("Data.tsv", function(error, data) {
-  data.forEach(function(d) {
-    d.mScore = +d.mScore;
-    d.mTime = +d.mTime;
-  });
-
- xScale.domain([d3.min(data, xValue)-1, d3.max(data, xValue)+1]);
-  yScale.domain([d3.min(data, yValue)-1, d3.max(data, yValue)+1]);
- 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-    .append("text")
-      .attr("class", "label")
-      .attr("x", width)
-      .attr("y", -6)
-      .style("text-anchor", "end")
-      .text("Hours of instruction per year");
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("class", "label")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Average score");
-
-  svg.selectAll(".dot")
-      .data(data)
-    .enter().append("circle")
-      .attr("class", "dot")
-      .attr("r", 3.5)
-      .attr("cx", xMap)
-      .attr("cy", yMap)
-      .style("fill", function(d) { return color(cValue(d));}) 
-      .on("mouseover", function(d) {
-          tooltip.transition()
-               .duration(200)
-               .style("opacity", .9);
-          tooltip.html(d.country)
-               .style("left", (d3.event.pageX + 10) + "px")
-               .style("top", (d3.event.pageY - 15) + "px");
-      })
-      .on("mouseout", function(d) {
-          tooltip.transition()
-               .duration(500)
-               .style("opacity", 0);
-      });
-
-  var legend = svg.selectAll(".legend")
-      .data(color.domain())
-    .enter().append("g")
-      .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-  legend.append("rect")
-      .attr("x", width - 18)
-      .attr("width", 18)
-      .attr("height", 18)
-      .style("fill", color);
-
-  legend.append("text")
-      .attr("x", width - 24)
-      .attr("y", 9)
-      .attr("dy", ".35em")
-      .style("text-anchor", "end")
-      .text(function(d) { return d;})
-});
-
-</script>
-</div>
-<p id="cite">Source: <a href="http://nces.ed.gov/programs/digest/d12/tables/dt12_460.asp">Average fourth-grade scores and annual instructional time in mathematics and science, by country or other education system: 2011.</a></p>
-<p class="textBlock">The above is a scatter plot of average time of math instruction against average math test scores by country. While the source data has both math and science, only the math data was used to achieve a cleaner plot.</p>
-<p class="textBlock">The calculated Person Correlation for instruction hours and test score is 0.162 signifying almost no correlation between the two. Also of interest is the banding of geographical areas relative to test scores - with Asia being at the top, Europe/Eurasia/Oceania and the Americas in the middle, and the Mid East and Africa toward the bottom. This effect is shown independent of instruction hours.</p>
-</center>
-
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-59987209-1', 'auto');
-  ga('send', 'pageview');
-
-</script>
-
+	</script>
 </body>
-</html>
