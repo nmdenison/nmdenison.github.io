@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<head>
+		<title>Nathan Denison - IE590 - Exam 1 - 3.2</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<head>
+
+<style>
+	body {
+		font: 12px sans-serif;
+		}
+	h1 {
+		font: 20px sans-serif;
+		}
+	.axis path, .axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+		}
+
+</style>
+
+<body>
+<center>
+<h1>Student per class in Universities A-E</h1>
+	<div align="center">
+
+
+		<script>
+
+			var plotData; 
+			
+			var margin = {top: 20, right: 20, bottom: 30, left: 40},
+				width = 960 - margin.left - margin.right,
+				height = 500 - margin.top - margin.bottom;
+				
+			d3.json("https://hivelab.org/static/exam1.json", function(data) {
+
+			plotData = data.map(function(d) {
+				return [{x:0, y:d["University A"]}, 
+					{x:1, y:d["University B"]},
+					{x:2, y:d["University C"]},
+					{x:3, y:d["University D"]},
+					{x:4, y:d["University E"]},
+					d["Year"]
+					];
+					});
+
+			var stack = d3.layout.stack();
+				stack(plotData);
+				console.log(plotData);	
+
+			var xScale = d3.scale.ordinal()
+				.domain(d3.range(plotData[0].length))
+				.rangeRoundBands([0, width], 0.05);
+				
+			var yScale = d3.scale.linear()
+				.domain([0, d3.max(plotData, function(d) {
+					return d3.max(d, function(d) {
+					return d.y0 + d.y;
+							});
+					})
+				])
+				.range([0, height])
+
+			var x = d3.scale.ordinal()
+				.rangeRoundBands([0, width], .1);
+
+			var y = d3.scale.linear()
+				.domain([0, d3.max(plotData, function(d) {
+					return d3.max(d, function(d) {
+					return d.y0 + d.y;
+						});
+					})
+				])
+				.range([height, 0])
+
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("left")
+				.tickFormat(d3.format(".2s"));
+
+			var colors = d3.scale.category20c();
+
+			var svg = d3.select("body").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			var groups = svg.selectAll("g")
+				.data(plotData)
+				.enter()
+				.append("g")
+				.style("fill", function(d, i) {
+					return colors(i);
+					});
+
+			var rects = groups.selectAll("rect")
+				.data(function(d) { return d; })
+				.enter()
+				.append("rect")
+				.attr("x", function(d) {
+					return xScale(d.x);
+					})
+				.attr("y", function(d) {
+					return height-yScale(d.y0+d.y);
+					})
+				.attr("height", function(d) {
+					return yScale(d.y);
+				})
+				.attr("width", xScale.rangeBand())
+				
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + height + ")")
+					.call(xAxis);
+				svg.append("text")
+					.attr("x", 0+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University A");
+				svg.append("text")
+					.attr("x", width/6+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University B");
+				svg.append("text")
+					.attr("x", width/6*2+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University C");
+				svg.append("text")
+					.attr("x", width/6*3+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University D");
+				svg.append("text")
+					.attr("x", width/6*4+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University E");
+				svg.append("g")
+					.attr("class", "y axis")
+					.call(yAxis)
+					.append("text")
+					.attr("x", 10)
+					.attr("y", -15)
+					.attr("dy", ".71em")
+					.style("text-anchor", "end")
+					.text("Students");
+
+			var legend = svg.selectAll(".legend")
+				.data(colors.domain().slice().reverse())
+				.enter().append("g")
+				.attr("class", "legend")
+				.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+				legend.append("rect")
+				.attr("x", width - 18)
+				.attr("width", 18)
+				.attr("height", 18)
+				.style("fill", colors);
+
+				legend.append("text")
+				.attr("x", width - 24)
+				.attr("y", 9)
+				.attr("dy", ".35em")
+				.style("text-anchor", "end")
+				.text(function(d) { return plotData[d][5]; });
+
+				});
+
+</script>
+
+</div>
+</center>
+</body>
+
+</html>
