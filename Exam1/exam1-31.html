@@ -46,13 +46,34 @@
 					];
 					});
 					
-					// can properly resolve a forEach loop so going brute force method.
-				globalinputdata = [[data[0][ 'University A' ], data[1][ 'University A' ], data[2][ 'University A' ], data[3][ 'University A' ]], [data[0][ 'University B' ], data[1][ 'University B' ], data[2][ 'University B' ], data[3][ 'University B' ]], [data[0][ 'University C' ], data[1][ 'University C' ], data[2][ 'University C' ], data[3][ 'University C' ]], [data[0][ 'University D' ], data[1][ 'University D' ], data[2][ 'University D' ], data[3][ 'University D' ]], [data[0][ 'University E' ], data[1][ 'University E' ], data[2][ 'University E' ], data[3][ 'University E' ]]];
- 				console.log(globalinputdata);
+				// Andrew Kay's "Brute Force Method"
+				inputData = [[data[0][ 'University A' ],
+							data[1][ 'University A' ], 
+							data[2][ 'University A' ], 
+							data[3][ 'University A' ]], 
+							[data[0][ 'University B' ], 
+							data[1][ 'University B' ], 
+							data[2][ 'University B' ], 
+							data[3][ 'University B' ]], 
+							[data[0][ 'University C' ], 
+							data[1][ 'University C' ], 
+							data[2][ 'University C' ], 
+							data[3][ 'University C' ]], 
+							[data[0][ 'University D' ], 
+							data[1][ 'University D' ], 
+							data[2][ 'University D' ], 
+							data[3][ 'University D' ]], 
+							[data[0][ 'University E' ], 
+							data[1][ 'University E' ], 
+							data[2][ 'University E' ], 
+							data[3][ 'University E' ]]];
 
- 				// next step for a brute force method to manipulate object arrays.
- 				var justseniordata = [globalinputdata[0][3], globalinputdata[1][3], globalinputdata[2][3], globalinputdata[3][3], globalinputdata[4][3]];
- 				console.log(justseniordata);
+ 				var plotSenior = [inputData[0][3], 
+						inputData[1][3], 
+						inputData[2][3], 
+						inputData[3][3], 
+						inputData[4][3]];
+ 				console.log(plotSenior);
 
 			var stack = d3.layout.stack();
 				stack(plotData);
@@ -101,18 +122,18 @@
 				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 			svg.selectAll("rect")
-					.data(justseniordata)
+					.data(plotSenior)
 					.enter()
 					.append("rect")
 					.attr("x", function(d, i) {
-						return xscale(i);
+						return xScale(i);
 					})
 					.attr("y", function(d) {
-						return h-yscale(d);
+						return height-yScale(d);
 					})
-					.attr("width", xscale.rangeBand())
+					.attr("width", xScale.rangeBand())
 					.attr("height", function(d) {
-			   			return yscale(d);
+			   			return yScale(d);
 			   		})
 			   		.attr("fill", "red");
 				svg.append("g")
@@ -159,30 +180,14 @@
 					.style("text-anchor", "end")
 					.text("Students");
 
-			var legend = svg.selectAll(".legend")
-				.data(colors.domain().slice().reverse())
-				.enter().append("g")
-				.attr("class", "legend")
-				.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-				legend.append("rect")
-				.attr("x", width - 18)
-				.attr("width", 18)
-				.attr("height", 18)
-				.style("fill", colors);
-
-				legend.append("text")
-				.attr("x", width - 24)
-				.attr("y", 9)
-				.attr("dy", ".35em")
-				.style("text-anchor", "end")
-				.text(function(d) { return plotData[d][5]; });
+			
 
 				});
 
 </script>
 
 </div>
+<p>Note: I did 3.2 first since it was easier. The code for above was copied from 3.2 and I used my group member's proposed method for pulling out the senior data.</p>
 </center>
 </body>
 
