@@ -65,7 +65,7 @@ var svg = d3.select(".chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-*d3.json("https://hivelab.org/static/exam1.json", function(rawData) {
+d3.json("https://hivelab.org/static/exam1.json", function(rawData) {
 
 console.log(rawData)
 //Pull senior keys and data
