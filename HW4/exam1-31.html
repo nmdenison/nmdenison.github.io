@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<head>
+		<title>Nathan Denison - IE590 - Exam 1 - 3.1</title>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+<head>
+
+<style>
+	body {
+		font: 12px sans-serif;
+		}
+	h1 {
+		font: 20px sans-serif;
+		}
+	.axis path, .axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+		}
+
+	.chart rect {
+		fill: steelblue;
+		}
+</style>
+
+<body>
+<center>
+<h1>Seniors in Universities A-E</h1>
+<div class="chart"></div>
+<script>
+
+var rawData = [
+   {
+      "Year":"Freshman",
+      "University A":120,
+      "University B":63,
+      "University C":55,
+      "University D":124,
+      "University E":90,
+	  "University F":5
+   },
+   {
+      "Year":"Sophomore",
+      "University A":98,
+      "University B":70,
+      "University C":40,
+      "University D":90,
+      "University E":93,
+	  "University F":5
+   },
+   {
+      "Year":"Junior",
+      "University A":100,
+      "University B":92,
+      "University C":48,
+      "University D":101,
+      "University E":99,
+	  "University F":5
+   },
+   {
+      "Year":"Senior",
+      "University A":90,
+      "University B":91,
+      "University C":46,
+      "University D":100,
+      "University E":92,
+	  "University F":5
+   }
+] ;
+
+//Pull senior keys and data
+for (i=0; i<rawData.length; i++) {
+	if (rawData[i].Year === "Senior") {
+		var senior=rawData[i]}	
+}
+var key=Object.keys(senior);
+key.shift();
+var data =[];
+for (i=0; i<key.length; i++) {
+	data[i]=senior[key[i]];
+	}
+
+
+var width = 960,
+    height = 500;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+	
+var y = d3.scale.linear()
+    .range([height, 0]);
+	
+
+
+	
+/*d3.json("https://hivelab.org/static/exam1.json", function(data) {
+
+//Pull senior keys and data
+	for (i=0; i<data.length; i++) {
+		if (data[i].Year === "Senior") {
+		var senior=data[i]}	
+	}
+	console.log(senior)
+	
+	var key=Object.keys(senior);
+	key.shift();
+	var plotData =[];
+	
+	for (i=0; i<key.length; i++) {
+		plotData[i]=senior[key[i]];
+	}
+	console.log(plotData)
+	console.log(key) */
+	
+
+	var x = d3.scale.linear()
+    .domain([0, d3.max(data)])
+    .range([0, 420]);
+
+d3.select(".chart")
+  .selectAll("div")
+    .data(data)
+  .enter().append("div")
+    .style("width", function(d) { return x(d) + "px"; })
+    .text(function(d) { return d; });
+
+	
+//});
+
+</script>
+</center>
+</body>
+
+</html>
