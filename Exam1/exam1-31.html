@@ -95,16 +95,15 @@ for (i=0; i<data.length; i++) {
 				stack(plotData);
 				console.log(plotData);	
 
-			var xScale = d3.scale.ordinal()
+			var x = d3.scale.ordinal()
 				.domain(d3.range(plotSenior.length))
-				.rangeRoundBands([0, width], 0.05);
+				.rangeRoundBands([0, width], .1);
 				
 			var yScale = d3.scale.linear()
 				.domain([0, d3.max(plotSenior)])
 				.range([0, height])
 
-			var x = d3.scale.ordinal()
-				.rangeRoundBands([0, width], .1);
+
 
 			var yinvert = d3.scale.linear()
 			.domain([0, d3.max(plotSenior)])
@@ -133,12 +132,12 @@ for (i=0; i<data.length; i++) {
 					.enter()
 					.append("rect")
 					.attr("x", function(d, i) {
-						return xScale(i);
+						return x(i);
 					})
 					.attr("y", function(d) {
 						return height-yScale(d);
 					})
-					.attr("width", xScale.rangeBand())
+					.attr("width", x.rangeBand())
 					.attr("height", function(d) {
 			   			return yScale(d);
 			   		})
