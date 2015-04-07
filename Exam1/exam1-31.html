@@ -96,11 +96,11 @@ for (i=0; i<data.length; i++) {
 				console.log(plotData);	
 
 			var xScale = d3.scale.ordinal()
-				.domain(d3.range(plotSenior[0].length))
+				.domain(d3.range(plotData[0].length))
 				.rangeRoundBands([0, width], 0.05);
 				
 			var yScale = d3.scale.linear()
-				.domain([0, d3.max(plotSenior, function(d) {
+				.domain([0, d3.max(plotData, function(d) {
 					return d3.max(d, function(d) {
 					return d.y0 + d.y;
 							});
@@ -112,7 +112,7 @@ for (i=0; i<data.length; i++) {
 				.rangeRoundBands([0, width], .1);
 
 			var y = d3.scale.linear()
-				.domain([0, d3.max(plotSenior, function(d) {
+				.domain([0, d3.max(plotData, function(d) {
 					return d3.max(d, function(d) {
 					return d.y0 + d.y;
 						});
