@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html><head>
-<meta http-equiv="content-type" content="text/html; charset=windows-1252">
+<html>
+<head>
 		<title>Nathan Denison - IE590 - Exam 1 - 3.1</title>
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
-
 <style>
 	body {
 		font: 12px sans-serif;
@@ -17,16 +15,17 @@
 		stroke: #000;
 		shape-rendering: crispEdges;
 		}
-
-
 </style>
+</head>
 
-</head><body>
+<body>
 <center>
 <h1>Seniors in Universities A-E</h1>
+<br><br>
+<p>Author: Nathan Denison</p>
+<p>Data source: <a href="https://hivelab.org/static/exam1.json">https://hivelab.org/static/exam1.json</a></p>
+<br><br>
 <div class="chart"></div>
-
-
 <script>
 //Code source http://bost.ocks.org/mike/bar/3/
 
@@ -34,98 +33,89 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 				width = 960 - margin.left - margin.right,
 				height = 500 - margin.top - margin.bottom;
 				
-			d3.json("https://hivelab.org/static/exam1.json", function(data) {
+d3.json("https://hivelab.org/static/exam1.json", function(data) {
 
-
-					
-	
+//Find senior data
 for (i=0; i<data.length; i++) {
 		if (data[i].Year === "Senior") {
 		var senior=data[i]}	
 	}
-	//console.log(senior)
-	
-	var key=Object.keys(senior);
+
+//Remove Object Keys	
+var key=Object.keys(senior);
 	key.shift();
-	var plotSenior =[];
-	
-	for (i=0; i<key.length; i++) {
-		plotSenior[i]=senior[key[i]];
+var plotSenior =[];
+for (i=0; i<key.length; i++) {
+	plotSenior[i]=senior[key[i]];
 	}
-	console.log(plotSenior)
-	console.log(key)
+console.log(plotSenior);
+console.log(key);
 		
-			var x = d3.scale.ordinal()
-				.domain(d3.range(plotSenior.length))
-				.rangeRoundBands([0, width], .1);
+//Build Plot
+var x = d3.scale.ordinal()
+	.domain(d3.range(plotSenior.length))
+	.rangeRoundBands([0, width], .1);
 				
-			var y = d3.scale.linear()
-				.domain([0, d3.max(plotSenior)])
-				.range([0, height])
+var y = d3.scale.linear()
+	.domain([0, d3.max(plotSenior)])
+	.range([0, height])
 
 var xkey = d3.scale.ordinal()
-				.domain(key)
-				.rangeRoundBands([0, width], .1);
+	.domain(key)
+	.rangeRoundBands([0, width], .1);
 
-			var yinvert = d3.scale.linear()
-			.domain([0, d3.max(plotSenior)])
-			.range([height, 0])
+var yinvert = d3.scale.linear()
+	.domain([0, d3.max(plotSenior)])
+	.range([height, 0])
 
+var xAxis = d3.svg.axis()
+	.scale(xkey)
+	.orient("bottom");
 
-			var xAxis = d3.svg.axis()
-				.scale(xkey)
-				.orient("bottom");
+var yAxis = d3.svg.axis()
+	.scale(yinvert)
+	.orient("left")
+	.tickFormat(d3.format(".2s"));
 
-			var yAxis = d3.svg.axis()
-				.scale(yinvert)
-				.orient("left")
-				.tickFormat(d3.format(".2s"));
+var svg = d3.select(".chart").append("svg")
+	.attr("width", width + margin.left + margin.right)
+	.attr("height", height + margin.top + margin.bottom)
+	.append("g")
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-			var colors = d3.scale.category20c();
-
-			var svg = d3.select(".chart").append("svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom)
-				.append("g")
-				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-			svg.selectAll("rect")
-					.data(plotSenior)
-					.enter()
-					.append("rect")
-					.attr("x", function(d, i) {
-						return x(i);
-					})
-					.attr("y", function(d) {
-						return height-y(d);
-					})
-					.attr("width", x.rangeBand())
-					.attr("height", function(d) {
-			   			return y(d);
-			   		})
-			   		.attr("fill", "steelblue");
-				svg.append("g")
-					.attr("class", "x axis")
-					.attr("transform", "translate(0," + height + ")")
-					.call(xAxis);
+svg.selectAll("rect")
+	.data(plotSenior)
+	.enter()
+	.append("rect")
+	.attr("x", function(d, i) {
+		return x(i);
+		})
+	.attr("y", function(d) {
+		return height-y(d);
+		})
+	.attr("width", x.rangeBand())
+	.attr("height", function(d) {
+		return y(d);
+		})
+	.attr("fill", "steelblue");
+	
+svg.append("g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(0," + height + ")")
+	.call(xAxis);
 			
 svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
+    .attr("class", "y axis")
+    .call(yAxis)
     .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Students");
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Students");
 
-			
-
-				});
-
-
+});
 </script>
 </center>
-
-
-</body></html>
+</body>
+</html>
