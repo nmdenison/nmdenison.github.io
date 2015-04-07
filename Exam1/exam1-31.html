@@ -38,7 +38,7 @@
 				
 			d3.json("https://hivelab.org/static/exam1.json", function(data) {
 
-			plotData = data.map(function(d) {
+		/*	plotData = data.map(function(d) {
 				return [{x:0, y:d["University A"]}, 
 					{x:1, y:d["University B"]},
 					{x:2, y:d["University C"]},
@@ -75,8 +75,22 @@
 						inputData[2][3], 
 						inputData[3][3], 
 						inputData[4][3]];
- 				console.log(plotSenior);
-
+ 				console.log(plotSenior); */
+for (i=0; i<data.length; i++) {
+		if (data[i].Year === "Senior") {
+		var senior=data[i]}	
+	}
+	console.log(senior)
+	
+	var key=Object.keys(senior);
+	key.shift();
+	var plotSenior =[];
+	
+	for (i=0; i<key.length; i++) {
+		plotSenior[i]=senior[key[i]];
+	}
+	console.log(plotSenior)
+	console.log(key)
 			var stack = d3.layout.stack();
 				stack(plotData);
 				console.log(plotData);	
