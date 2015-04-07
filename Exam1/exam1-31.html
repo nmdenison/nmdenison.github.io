@@ -30,7 +30,7 @@
 
 		//Code source http://bl.ocks.org/mbostock/3886208
 		
-			var plotData; 
+		//	var plotData; 
 			
 			var margin = {top: 20, right: 20, bottom: 30, left: 40},
 				width = 960 - margin.left - margin.right,
@@ -38,7 +38,7 @@
 				
 			d3.json("https://hivelab.org/static/exam1.json", function(data) {
 
-		plotData = data.map(function(d) {
+	/*	plotData = data.map(function(d) {
 				return [{x:0, y:d["University A"]}, 
 					{x:1, y:d["University B"]},
 					{x:2, y:d["University C"]},
@@ -46,7 +46,7 @@
 					{x:4, y:d["University E"]},
 					d["Year"]
 					];
-					}); 
+					});  */
 					
 		/*		// Andrew Kay's "Brute Force Method"
 				inputData = [[data[0][ 'University A' ],
@@ -91,9 +91,9 @@ for (i=0; i<data.length; i++) {
 	}
 	console.log(plotSenior)
 	//console.log(key)
-			var stack = d3.layout.stack();
+		/*	var stack = d3.layout.stack();
 				stack(plotData);
-				console.log(plotData);	
+				console.log(plotData);	*/
 
 			var x = d3.scale.ordinal()
 				.domain(d3.range(plotSenior.length))
