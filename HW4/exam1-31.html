@@ -18,9 +18,7 @@
 		shape-rendering: crispEdges;
 		}
 
-	.chart rect {
-		fill: steelblue;
-		}
+
 </style>
 
 </head><body>
@@ -105,6 +103,7 @@ var xkey = d3.scale.ordinal()
 					.attr("height", function(d) {
 			   			return y(d);
 			   		})
+			   		.attr("fill", "steelblue");
 				svg.append("g")
 					.attr("class", "x axis")
 					.attr("transform", "translate(0," + height + ")")
