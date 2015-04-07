@@ -106,7 +106,7 @@ for (i=0; i<data.length; i++) {
 			var x = d3.scale.ordinal()
 				.rangeRoundBands([0, width], .1);
 
-			var y = d3.scale.linear()
+			var yinvert = d3.scale.linear()
 			.domain([0, d3.max(plotSenior)])
 			.range([height, 0])
 
@@ -116,7 +116,7 @@ for (i=0; i<data.length; i++) {
 				.orient("bottom");
 
 			var yAxis = d3.svg.axis()
-				.scale(y)
+				.scale(yinvert)
 				.orient("left")
 				.tickFormat(d3.format(".2s"));
 
