@@ -103,7 +103,9 @@ for (i=0; i<data.length; i++) {
 				.domain([0, d3.max(plotSenior)])
 				.range([0, height])
 
-
+var xkey = d3.scale.ordinal()
+				.domain(key)
+				.rangeRoundBands([0, width], .1);
 
 			var yinvert = d3.scale.linear()
 			.domain([0, d3.max(plotSenior)])
@@ -111,7 +113,7 @@ for (i=0; i<data.length; i++) {
 
 
 			var xAxis = d3.svg.axis()
-				.scale(x)
+				.scale(xkey)
 				.orient("bottom");
 
 			var yAxis = d3.svg.axis()
