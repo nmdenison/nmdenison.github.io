@@ -100,7 +100,7 @@ for (i=0; i<data.length; i++) {
 				.rangeRoundBands([0, width], 0.05);
 				
 			var yScale = d3.scale.linear()
-				.domain([0, d3.max(data)])
+				.domain([0, d3.max(plotSenior)])
 				.range([0, height])
 
 			var x = d3.scale.ordinal()
