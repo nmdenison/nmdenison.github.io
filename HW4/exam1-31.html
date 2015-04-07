@@ -48,7 +48,8 @@ var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
 
 var y = d3.scale.linear()
-    .range([height, 0]);
+	.range([height, 0])
+
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -57,7 +58,7 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .ticks(10, "%");
+    .tickFormat(d3.format(".2s"));
 
 var svg = d3.select(".chart").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -86,33 +87,75 @@ console.log(rawData)
 	console.log(key)
 	
   x.domain([0,key.length]);
-  y.domain([0, d3.max(data, function(d) { return data; })]);
+  y.domain([0, d3.max(data, function(d) {
+					return d3.max(d, function(d) {
+					return d.y0 + d.y;
+						});
+					})
+				])
 
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis);
+svg.selectAll("rect")
+					.data(data)
+					.enter()
+					.append("rect")
+					.attr("x", function(d, i) {
+						return x(i);
+					})
+					.attr("y", function(d) {
+						return height-y(d);
+					})
+					.attr("width", x.rangeBand())
+					.attr("height", function(d) {
+			   			return y(d);
+			   		})
+			   		.attr("fill", "red");
+				svg.append("g")
+					.attr("class", "x axis")
+					.attr("transform", "translate(0," + height + ")")
+					.call(xAxis);
+				svg.append("text")
+					.attr("x", 0+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University A");
+				svg.append("text")
+					.attr("x", width/6+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University B");
+				svg.append("text")
+					.attr("x", width/6*2+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University C");
+				svg.append("text")
+					.attr("x", width/6*3+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University D");
+				svg.append("text")
+					.attr("x", width/6*4+50)
+					.attr("y", height+15)
+					.attr("fill", "black")
+					.attr("style", "font-size:10px")
+					.text("University E");
+				svg.append("g")
+					.attr("class", "y axis")
+					.call(yAxis)
+					.append("text")
+					.attr("x", 10)
+					.attr("y", -15)
+					.attr("dy", ".71em")
+					.style("text-anchor", "end")
+					.text("Students");
 
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Students");
+			
 
-  svg.selectAll(".bar")
-      .data(data)
-    .enter().append("rect")
-      .attr("class", "bar")
-      .attr("x", function(d) { return x(key); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(data); })
-      .attr("height", function(d) { return height - y(data); });
-
-});
+				});
 
 </script>
 </body>
