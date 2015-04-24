@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<title>Nathan Denison - IE590 - Exam 2 - 3.1</title>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<style>
+	body {
+		font: 12px sans-serif;
+		background-color: #ffffff;
+		}
+	h1 {
+		font: 20px sans-serif;
+		}
+	table {
+		border-collapse: collapse;
+		border: 1px solid black;
+		}
+	th, td {
+		border-collapse: collapse;
+		border: 1px solid black;
+		padding: 15px;
+		text-align: right;
+		}
+	th {
+		background-color: #d3d3d3;
+		}
+	tr:hover {
+		background-color: #ffff99;
+		}
+	.clicked {
+		background-color: #33ff33;
+		}
+	tr.clicked:hover{
+		background-color: #adff2f;
+		}
+	.hclicked {
+		background-color: #b8860b;
+		}
+</style>
+</head>
+
+<body>
+<center>
+<h1>Question 3.1</h1>
+<br><br>
+<p>Author: Nathan Denison</p>
+<p>Data source: <a href="http://hivelab.org/static/exam2.json">http://hivelab.org/static/exam2.json</a></p>
+<br><br>
+<table>
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+<script>
+/* 
+Code Sources:
+https://gist.github.com/LevelbossMike/2623382
+*/
+
+d3.json("https://hivelab.org/static/exam2.json", function(data) {
+console.log(data);
+
+//Pull keys for rows
+var key=Object.keys(data[0]);
+	console.log(key);
+
+
+	
+//Create header
+var thead = d3.select("thead").selectAll("th")
+	.data(key)
+	.enter().append("th").text(function(d){return d})
+	.on("click", function(d) {
+		d3.selectAll("th").classed("hclicked",false);
+		d3.select(this).classed("hclicked",true);
+		});	
+	
+	
+//Create table
+var tr = d3.select("tbody").selectAll("tr")
+	.data(data).enter().append("tr")
+	.on("click", function(d) {
+		d3.selectAll("tr").classed("clicked",false);
+		d3.select(this).classed("clicked",true);
+		})
+var td = tr.selectAll("td")
+	.data(function(d){return d3.values(d)})
+	.enter().append("td")
+	.text(function(d) {return d})
+
+	
+
+});
+</script>
+</center>
+</body>
+</html>
